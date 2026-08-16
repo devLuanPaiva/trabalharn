@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { PostGeneratorModule } from './post-generator/post-generator.module';
+import { PostGeneratorModule } from './resources/post-generator/post-generator.module';
 
 @Module({
   imports: [PostGeneratorModule],
