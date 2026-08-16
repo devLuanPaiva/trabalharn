@@ -1,0 +1,13 @@
+import Image from 'next/image';
+
+export function BrandLogoHeader() {
+  return (
+    <header className="flex items-center gap-3.5 bg-brand-green px-6 py-4.5 text-white">
+      <Image src="/brand/simbolo-disco-branco.png" alt="TrabalhaRN" width={46} height={46} priority />
+      <b className="text-[22px] font-bold tracking-tight">
+        Trabalha<i className="not-italic text-brand-yellow">RN</i>
+      </b>
+      <span className="ml-auto text-[13px] opacity-85">Gerador de posts · 1080×1350 e 1080×1920</span>
+    </header>
+  );
+}
