@@ -10,6 +10,15 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-brand-green: #009b3a;
+  --color-brand-white: #ffffff;
+  --color-brand-yellow: #fedf00;
+  --color-brand-blue: #2498dc;
+  --color-brand-ink: #0e3b23;
+  --color-brand-muted: #6c7c72;
+  --color-brand-divider: #e6ede8;
+  --font-poppins: var(--font-poppins);
 }
 
 @media (prefers-color-scheme: dark) {
