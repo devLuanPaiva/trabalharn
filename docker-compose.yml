@@ -1,0 +1,30 @@
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    container_name: trabalharn-n8n
+    restart: unless-stopped
+    ports:
+      - '${N8N_PORT:-5679}:5678'
+    environment:
+      - N8N_HOST=${N8N_HOST:-localhost}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - N8N_WEBHOOK_URL=${N8N_WEBHOOK_URL:-http://localhost:5679/}
+      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE:-America/Fortaleza}
+      - TZ=${GENERIC_TIMEZONE:-America/Fortaleza}
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY:-}
+      # Allows expressions like {{$env.BACKEND_API_URL}} inside n8n nodes.
+      - N8N_BLOCK_ENV_ACCESS_IN_NODE=false
+      # The backend runs on the host (outside Docker), not as a compose
+      # service. host.docker.internal resolves to the host machine from
+      # inside the container.
+      - BACKEND_API_URL=${BACKEND_API_URL:-http://host.docker.internal:3001}
+    volumes:
+      - n8n_data:/home/node/.n8n
+    extra_hosts:
+      # host-gateway is required for host.docker.internal on Linux; Docker
+      # Desktop (Windows/Mac) already resolves it natively.
+      - 'host.docker.internal:host-gateway'
+
+volumes:
+  n8n_data:

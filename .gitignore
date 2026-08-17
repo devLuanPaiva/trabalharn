@@ -1,0 +1,6 @@
+# dotenv environment variable files (used by docker-compose)
+.env
+.env.local
+
+# OS
+.DS_Store

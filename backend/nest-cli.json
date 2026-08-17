@@ -6,7 +6,7 @@
     "deleteOutDir": true,
     "assets": [
       {
-        "include": "post-generator/rendering/assets/**/*",
+        "include": "resources/post-generator/rendering/assets/**/*",
         "outDir": "dist"
       }
     ],
