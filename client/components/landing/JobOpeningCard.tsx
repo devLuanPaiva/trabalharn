@@ -16,10 +16,10 @@ export function JobOpeningCard({ jobOpening }: JobOpeningCardProps) {
 
       <div className="flex flex-wrap gap-2 text-xs font-medium">
         {location && (
-          <span className="rounded-full bg-brand-green/10 px-3 py-1 text-brand-green">📍 {location}</span>
+          <span className="rounded-full bg-brand-green/10 px-3 py-1 text-brand-ink">📍 {location}</span>
         )}
         {contractType && (
-          <span className="rounded-full bg-brand-blue/10 px-3 py-1 text-brand-blue">💼 {contractType}</span>
+          <span className="rounded-full bg-brand-blue/10 px-3 py-1 text-brand-ink">💼 {contractType}</span>
         )}
         {wage && <span className="rounded-full bg-brand-yellow/20 px-3 py-1 text-brand-ink">💰 {wage}</span>}
       </div>
