@@ -16,16 +16,9 @@
   --color-brand-yellow: #fedf00;
   --color-brand-blue: #2498dc;
   --color-brand-ink: #0e3b23;
-  --color-brand-muted: #6c7c72;
+  --color-brand-muted: #5c6b62;
   --color-brand-divider: #e6ede8;
   --font-poppins: var(--font-poppins);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
