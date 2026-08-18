@@ -39,7 +39,7 @@ const QUALITIES: Quality[] = [
 
 export function QualitiesSection() {
   return (
-    <section id="qualidades" className="mx-auto max-w-6xl px-6 py-16">
+    <section id="qualidades" className="mx-auto max-w-6xl bg-white px-6 py-16">
       <header className="max-w-2xl">
         <h2 className="text-3xl font-bold text-brand-ink">Por que usar o TrabalhaRN</h2>
         <p className="mt-2 text-brand-muted">Uma página feita pra quem procura emprego de verdade no RN.</p>

@@ -9,7 +9,7 @@ export async function JobOpeningsSection() {
   const jobOpenings = await fetchFeaturedJobOpenings({ limit: FEATURED_JOB_OPENINGS_LIMIT }).catch(() => null);
 
   return (
-    <section id="vagas" className="mx-auto max-w-6xl px-6 py-16">
+    <section id="vagas" className="mx-auto max-w-6xl bg-white px-6 py-16">
       <header className="mb-10 max-w-2xl">
         <h2 className="text-3xl font-bold text-brand-ink">Vagas em destaque</h2>
         <p className="mt-2 text-brand-muted">Atualizado direto das empresas parceiras no Rio Grande do Norte.</p>

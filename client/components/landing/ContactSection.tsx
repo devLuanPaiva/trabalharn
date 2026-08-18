@@ -7,7 +7,7 @@ export function ContactSection() {
   );
 
   return (
-    <section id="contato" className="mx-auto max-w-6xl px-6 py-16">
+    <section id="contato" className="mx-auto max-w-6xl bg-white px-6 py-16">
       <header className="max-w-2xl">
         <h2 className="text-3xl font-bold text-brand-ink">Fala com a gente</h2>
         <p className="mt-2 text-brand-muted">Dúvidas, vagas ou parcerias — escolha o canal que preferir.</p>
