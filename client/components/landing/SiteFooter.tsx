@@ -6,7 +6,7 @@ export function SiteFooter() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-brand-green text-white">
+    <footer className="bg-brand-ink text-white">
       <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-10 text-sm sm:flex-row sm:items-center sm:justify-between">
         <BrandWordmark tone="dark" />
         <p className="text-white/80">Vagas de emprego no Rio Grande do Norte.</p>

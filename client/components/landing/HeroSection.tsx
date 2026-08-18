@@ -14,7 +14,7 @@ export function HeroSection() {
           <h1 className="mt-4 text-4xl font-bold leading-tight text-white md:text-5xl">
             Vagas de emprego de verdade, perto de você.
           </h1>
-          <p className="mt-4 max-w-xl text-lg text-white/90">
+          <p className="mt-4 max-w-xl text-2xl font-medium text-white">
             O TrabalhaRN reúne oportunidades reais em Natal, Mossoró, Parnamirim e em todo o Rio Grande do Norte —
             direto no seu celular, sem enrolação.
           </p>
