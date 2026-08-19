@@ -1,0 +1,12 @@
+node_modules
+coverage
+src
+test
+*.spec.ts
+*.test.ts
+.env
+.env.*
+*.log
+.git
+.idea
+.vscode
