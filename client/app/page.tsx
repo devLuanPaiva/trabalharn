@@ -5,7 +5,7 @@ import { HeroSection } from '@/components/landing/HeroSection';
 import { JobOpeningsSection } from '@/components/landing/JobOpeningsSection';
 import { JobOpeningsSectionSkeleton } from '@/components/landing/JobOpeningsSectionSkeleton';
 import { QualitiesSection } from '@/components/landing/QualitiesSection';
-import { SiteFooter } from '@/components/landing/SiteFooter';
+import { SiteFooter } from '@/components/site/SiteFooter';
 import { SiteHeader } from '@/components/landing/SiteHeader';
 
 export default function Home() {
