@@ -1,10 +1,14 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import type { Request, Response } from 'express';
 import { AppModule } from './app.module';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+let appPromise: Promise<NestExpressApplication> | undefined;
+
+async function bootstrap(): Promise<NestExpressApplication> {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
@@ -18,6 +22,26 @@ async function bootstrap() {
     SwaggerModule.setup('docs', app, document);
   }
 
-  await app.listen(process.env.PORT ?? 3001);
+  await app.init();
+  return app;
 }
-bootstrap();
+
+function ensureBootstrapped(): Promise<NestExpressApplication> {
+  if (!appPromise) {
+    appPromise = bootstrap();
+  }
+  return appPromise;
+}
+
+// `dist/main.js` is required (not executed as the entry script) by Vercel's
+// @vercel/node runtime, which calls the exported handler per request instead
+// of relying on a long-lived `app.listen()` server.
+if (require.main === module) {
+  ensureBootstrapped().then((app) => app.listen(process.env.PORT ?? 3001));
+}
+
+export default async function handler(req: Request, res: Response) {
+  const app = await ensureBootstrapped();
+  const expressInstance = app.getHttpAdapter().getInstance();
+  expressInstance(req, res);
+}
