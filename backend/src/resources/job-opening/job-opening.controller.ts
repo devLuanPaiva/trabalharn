@@ -40,6 +40,16 @@ export class JobOpeningController {
     return this.jobOpeningService.findAll(query);
   }
 
+  @Get('next-to-publish')
+  @ApiOperation({
+    summary:
+      'Get the oldest job opening not yet posted to Facebook/Instagram, wrapped as { jobOpening: null } when the queue is empty',
+  })
+  async findNextUnpublished(): Promise<{ jobOpening: JobOpening | null }> {
+    const jobOpening = await this.jobOpeningService.findNextUnpublished();
+    return { jobOpening };
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get a job opening by id' })
   findOne(@Param('id', ParseUUIDPipe) id: string): Promise<JobOpening> {

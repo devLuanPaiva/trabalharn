@@ -53,6 +53,10 @@ export class JobOpeningService {
     return { items, total, page, limit };
   }
 
+  findNextUnpublished(): Promise<JobOpening | null> {
+    return this.jobOpeningRepository.findNextUnpublished();
+  }
+
   async findOne(id: string): Promise<JobOpening> {
     const jobOpening = await this.jobOpeningRepository.findById(id);
     if (!jobOpening) {
