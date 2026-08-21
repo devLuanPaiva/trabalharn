@@ -9,6 +9,7 @@ import {
 } from './solides.types';
 
 const SOLIDES_SOURCE = 'solides';
+const STORY_FOOTER_TEXT = 'Siga @trabalharn e não perca as vagas';
 
 export interface MappedVacancy {
   jobOpening: CreateJobOpeningDto;
@@ -106,15 +107,30 @@ export function buildLocation(vacancy: SolidesVacancy): string {
   return [city, stateCode].filter(Boolean).join(', ');
 }
 
-export function computeJobOpeningHash(source: string, postUrl: string): string {
-  return createHash('sha256').update(`${source}:${postUrl}`).digest('hex');
+export function computeJobOpeningHash(
+  source: string,
+  externalId: string,
+): string {
+  return createHash('sha256').update(`${source}:${externalId}`).digest('hex');
+}
+
+/**
+ * The company-specific subdomain doesn't point at the individual vacancy
+ * (Solides has no stable public per-vacancy URL under this domain), so this
+ * is a link to the company's careers page, not the exact listing.
+ */
+export function buildSolidesCareersUrl(vacancy: SolidesVacancy): string {
+  return vacancy.slug
+    ? `https://${vacancy.slug}.vagas.solides.com.br`
+    : 'https://vagas.solides.com.br';
 }
 
 export function mapSolidesVacancyToJobOpening(
   vacancy: SolidesVacancy,
 ): CreateJobOpeningDto {
-  const postUrl = vacancy.redirectLink;
-  const hash = computeJobOpeningHash(SOLIDES_SOURCE, postUrl);
+  const externalId = String(vacancy.id).slice(0, 120);
+  const postUrl = buildSolidesCareersUrl(vacancy);
+  const hash = computeJobOpeningHash(SOLIDES_SOURCE, externalId);
   const contractType = vacancy.recruitmentContractType?.[0]?.name ?? undefined;
   const requirements = vacancy.hardSkills?.length
     ? vacancy.hardSkills.map((skill) => skill.name).join('\n')
@@ -130,7 +146,7 @@ export function mapSolidesVacancyToJobOpening(
     location: buildLocation(vacancy).slice(0, 160) || undefined,
     companyName: vacancy.companyName?.slice(0, 160),
     source: SOLIDES_SOURCE,
-    externalId: String(vacancy.id).slice(0, 120),
+    externalId,
     postUrl,
     hash,
     publishedAt: vacancy.createdAt ? new Date(vacancy.createdAt) : undefined,
@@ -157,6 +173,8 @@ export function mapSolidesVacancyToJobPosting(
     requirements: vacancy.hardSkills
       ?.slice(0, 5)
       .map((skill) => skill.name.slice(0, 100)),
+    applicationInstructions: vacancy.redirectLink.slice(0, 140),
+    storyFooterText: STORY_FOOTER_TEXT,
   };
 }
 

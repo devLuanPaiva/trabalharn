@@ -1,5 +1,6 @@
 import {
   buildLocation,
+  buildSolidesCareersUrl,
   computeJobOpeningHash,
   filterAndMapRnVacancies,
   formatSalary,
@@ -35,6 +36,7 @@ function buildVacancy(overrides: Partial<SolidesVacancy> = {}): SolidesVacancy {
     city: { id: 1164, name: 'Natal', state_id: 11 },
     redirectLink:
       'https://elevesolucoes.solides.jobs/vacancies/904705?origem=portal',
+    slug: 'elevesolucoes',
     jobType: 'presencial',
     openPositions: 1,
     availablePositions: 1,
@@ -191,23 +193,29 @@ describe('normalizeCityCasing / buildLocation', () => {
 
 describe('computeJobOpeningHash', () => {
   it('produces a deterministic 64-char hex digest', () => {
-    const hash = computeJobOpeningHash('solides', 'https://example.com/vaga/1');
+    const hash = computeJobOpeningHash('solides', '1');
     expect(hash).toMatch(/^[a-f0-9]{64}$/);
-    expect(computeJobOpeningHash('solides', 'https://example.com/vaga/1')).toBe(
-      hash,
+    expect(computeJobOpeningHash('solides', '1')).toBe(hash);
+  });
+
+  it('produces different hashes for different external ids', () => {
+    const hashA = computeJobOpeningHash('solides', '1');
+    const hashB = computeJobOpeningHash('solides', '2');
+    expect(hashA).not.toBe(hashB);
+  });
+});
+
+describe('buildSolidesCareersUrl', () => {
+  it('builds the company subdomain when a slug is present', () => {
+    const vacancy = buildVacancy({ slug: 'elevesolucoes' });
+    expect(buildSolidesCareersUrl(vacancy)).toBe(
+      'https://elevesolucoes.vagas.solides.com.br',
     );
   });
 
-  it('produces different hashes for different postUrls', () => {
-    const hashA = computeJobOpeningHash(
-      'solides',
-      'https://example.com/vaga/1',
-    );
-    const hashB = computeJobOpeningHash(
-      'solides',
-      'https://example.com/vaga/2',
-    );
-    expect(hashA).not.toBe(hashB);
+  it('falls back to the generic domain when there is no slug', () => {
+    const vacancy = buildVacancy({ slug: null });
+    expect(buildSolidesCareersUrl(vacancy)).toBe('https://vagas.solides.com.br');
   });
 });
 
@@ -220,10 +228,8 @@ describe('mapSolidesVacancyToJobOpening', () => {
     expect(result.title).toBe('Estagiário de Telefonia');
     expect(result.source).toBe('solides');
     expect(result.externalId).toBe('904705');
-    expect(result.postUrl).toBe(vacancy.redirectLink);
-    expect(result.hash).toBe(
-      computeJobOpeningHash('solides', vacancy.redirectLink),
-    );
+    expect(result.postUrl).toBe('https://elevesolucoes.vagas.solides.com.br');
+    expect(result.hash).toBe(computeJobOpeningHash('solides', '904705'));
     expect(result.wage).toBe('A combinar');
     expect(result.workingHours).toBe('presencial');
     expect(result.contractType).toBe('Estágio');
@@ -268,6 +274,8 @@ describe('mapSolidesVacancyToJobPosting', () => {
       expect(requirement.length).toBeLessThanOrEqual(100);
     });
     expect(result.vacancyCount).toBe(999);
+    expect(result.applicationInstructions).toBe(vacancy.redirectLink);
+    expect(result.storyFooterText).toBe('Siga @trabalharn e não perca as vagas');
   });
 
   it('clamps vacancyCount to at least 1 when positions are missing', () => {
