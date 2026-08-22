@@ -4,10 +4,12 @@ import {
   Entity,
   Index,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity({ name: 'job_openings' })
+@Unique('UQ_job_openings_source_external_id', ['source', 'externalId'])
 export class JobOpening {
   @PrimaryGeneratedColumn('uuid')
   id: string;

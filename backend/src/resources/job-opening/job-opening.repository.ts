@@ -26,6 +26,13 @@ export class JobOpeningRepository {
     return this.repository.findOneBy({ hash });
   }
 
+  findBySourceAndExternalId(
+    source: string,
+    externalId: string,
+  ): Promise<JobOpening | null> {
+    return this.repository.findOneBy({ source, externalId });
+  }
+
   findNextUnpublished(): Promise<JobOpening | null> {
     return this.repository.findOne({
       where: [

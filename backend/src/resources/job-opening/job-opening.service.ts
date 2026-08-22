@@ -16,11 +16,26 @@ export class JobOpeningService {
   constructor(private readonly jobOpeningRepository: JobOpeningRepository) {}
 
   async create(dto: CreateJobOpeningDto): Promise<JobOpening> {
-    const existing = await this.jobOpeningRepository.findByHash(dto.hash);
-    if (existing) {
+    const existingByHash = await this.jobOpeningRepository.findByHash(
+      dto.hash,
+    );
+    if (existingByHash) {
       throw new ConflictException(
         `Job opening with hash "${dto.hash}" already exists`,
       );
+    }
+
+    if (dto.externalId) {
+      const existingByExternalId =
+        await this.jobOpeningRepository.findBySourceAndExternalId(
+          dto.source,
+          dto.externalId,
+        );
+      if (existingByExternalId) {
+        throw new ConflictException(
+          `Job opening from source "${dto.source}" with externalId "${dto.externalId}" already exists`,
+        );
+      }
     }
 
     const jobOpening = this.jobOpeningRepository.create(dto);

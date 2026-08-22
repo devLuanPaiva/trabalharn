@@ -106,6 +106,37 @@ describe('JobOpeningRepository', () => {
     expect(result).toBe(jobOpening);
   });
 
+  it('finds a job opening by source and externalId', async () => {
+    const typeOrmRepository = buildTypeOrmRepositoryMock();
+    const jobOpening = buildJobOpening({ externalId: '908125' });
+    typeOrmRepository.findOneBy.mockResolvedValue(jobOpening);
+    const repository = new JobOpeningRepository(typeOrmRepository);
+
+    const result = await repository.findBySourceAndExternalId(
+      'solides',
+      '908125',
+    );
+
+    expect(typeOrmRepository.findOneBy).toHaveBeenCalledWith({
+      source: 'solides',
+      externalId: '908125',
+    });
+    expect(result).toBe(jobOpening);
+  });
+
+  it('returns null when no job opening matches source and externalId', async () => {
+    const typeOrmRepository = buildTypeOrmRepositoryMock();
+    typeOrmRepository.findOneBy.mockResolvedValue(null);
+    const repository = new JobOpeningRepository(typeOrmRepository);
+
+    const result = await repository.findBySourceAndExternalId(
+      'solides',
+      'missing',
+    );
+
+    expect(result).toBeNull();
+  });
+
   it('finds the oldest job opening without a facebookPostId', async () => {
     const typeOrmRepository = buildTypeOrmRepositoryMock();
     const jobOpening = buildJobOpening();
