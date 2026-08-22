@@ -186,6 +186,15 @@ export function mapSolidesVacancyToJobPosting(
   };
 }
 
+/**
+ * A confidential/blank company name means there's no employer to credit or
+ * verify — nothing worth publishing under the TrabalhaRN brand.
+ */
+export function hasDisclosedCompany(vacancy: SolidesVacancy): boolean {
+  const name = vacancy.companyName?.trim().toLowerCase() ?? '';
+  return name.length > 0 && !name.includes('confidencial');
+}
+
 export function filterAndMapRnVacancies(
   response: SolidesVacanciesResponse,
   municipios: IbgeMunicipio[],
@@ -195,6 +204,7 @@ export function filterAndMapRnVacancies(
   return vacancies
     .filter((vacancy) => vacancy.state?.code === 'RN')
     .filter((vacancy) => isRnMunicipality(vacancy.city?.name, municipios))
+    .filter(hasDisclosedCompany)
     .map((vacancy) => ({
       jobOpening: mapSolidesVacancyToJobOpening(vacancy),
       jobPosting: mapSolidesVacancyToJobPosting(vacancy),

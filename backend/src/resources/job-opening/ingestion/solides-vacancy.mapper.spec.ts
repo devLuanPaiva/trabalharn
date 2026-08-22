@@ -5,6 +5,7 @@ import {
   computeJobOpeningHash,
   filterAndMapRnVacancies,
   formatSalary,
+  hasDisclosedCompany,
   isRnMunicipality,
   mapSolidesVacancyToJobOpening,
   mapSolidesVacancyToJobPosting,
@@ -307,6 +308,32 @@ describe('mapSolidesVacancyToJobPosting', () => {
   });
 });
 
+describe('hasDisclosedCompany', () => {
+  it('accepts a real company name', () => {
+    expect(hasDisclosedCompany(buildVacancy({ companyName: 'Multigiro' }))).toBe(
+      true,
+    );
+  });
+
+  it.each([
+    'Empresa confidencial',
+    'CONFIDENCIAL',
+    'confidencial',
+    '',
+    '   ',
+  ])('rejects a confidential or blank company name: %s', (companyName) => {
+    expect(hasDisclosedCompany(buildVacancy({ companyName }))).toBe(false);
+  });
+
+  it('rejects a missing companyName', () => {
+    expect(
+      hasDisclosedCompany(
+        buildVacancy({ companyName: undefined as unknown as string }),
+      ),
+    ).toBe(false);
+  });
+});
+
 describe('filterAndMapRnVacancies', () => {
   function buildResponse(
     vacancies: SolidesVacancy[],
@@ -343,6 +370,23 @@ describe('filterAndMapRnVacancies', () => {
     expect(result).toHaveLength(1);
     expect(result[0].jobOpening.externalId).toBe('904705');
     expect(result[0].jobPosting.jobTitle).toBe('Estagiário de Telefonia');
+  });
+
+  it('drops vacancies with a confidential or missing company name', () => {
+    const disclosed = buildVacancy();
+    const confidential = buildVacancy({
+      id: 4,
+      companyName: 'Empresa confidencial',
+    });
+    const blank = buildVacancy({ id: 5, companyName: '' });
+
+    const result = filterAndMapRnVacancies(
+      buildResponse([disclosed, confidential, blank]),
+      RN_MUNICIPIOS,
+    );
+
+    expect(result).toHaveLength(1);
+    expect(result[0].jobOpening.externalId).toBe('904705');
   });
 
   it('returns an empty array when there are no vacancies', () => {
