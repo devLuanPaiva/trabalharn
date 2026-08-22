@@ -1,12 +1,25 @@
-import { createHash } from 'crypto';
 import { CreateJobOpeningDto } from '../dto/create-job-opening.dto';
 import { JobPostingDto } from '../../post-generator/dto/job-posting.dto';
 import {
+  computeJobOpeningHash,
   IbgeMunicipio,
+  isRnMunicipality,
+  normalizeCityCasing,
+  stripHtml,
+} from './shared.util';
+import {
   SolidesSalary,
   SolidesVacancy,
   SolidesVacanciesResponse,
 } from './solides.types';
+
+export {
+  computeJobOpeningHash,
+  isRnMunicipality,
+  normalizeCityCasing,
+  normalizeMunicipalityName,
+  stripHtml,
+} from './shared.util';
 
 const SOLIDES_SOURCE = 'solides';
 const STORY_FOOTER_TEXT = 'Siga @trabalharn e não perca as vagas';
@@ -14,54 +27,6 @@ const STORY_FOOTER_TEXT = 'Siga @trabalharn e não perca as vagas';
 export interface MappedVacancy {
   jobOpening: CreateJobOpeningDto;
   jobPosting: JobPostingDto;
-}
-
-const COMBINING_DIACRITICS_RANGE = { start: 0x0300, end: 0x036f };
-
-function stripDiacritics(value: string): string {
-  return Array.from(value.normalize('NFD'))
-    .filter((char) => {
-      const codePoint = char.codePointAt(0) ?? 0;
-      return (
-        codePoint < COMBINING_DIACRITICS_RANGE.start ||
-        codePoint > COMBINING_DIACRITICS_RANGE.end
-      );
-    })
-    .join('');
-}
-
-export function normalizeMunicipalityName(name: string): string {
-  return stripDiacritics(name).trim().toLowerCase();
-}
-
-export function isRnMunicipality(
-  cityName: string | undefined,
-  municipios: IbgeMunicipio[],
-): boolean {
-  if (!cityName) {
-    return false;
-  }
-  const normalized = normalizeMunicipalityName(cityName);
-  return municipios.some(
-    (municipio) => normalizeMunicipalityName(municipio.nome) === normalized,
-  );
-}
-
-export function stripHtml(html: string | undefined | null): string {
-  if (!html) {
-    return '';
-  }
-  return html
-    .replace(/<\/(p|li|div|br)>/gi, '\n')
-    .replace(/<li>/gi, '- ')
-    .replace(/<[^>]+>/g, '')
-    .replace(/&nbsp;/gi, ' ')
-    .replace(/&amp;/gi, '&')
-    .replace(/&quot;/gi, '"')
-    .replace(/&#0?39;/gi, "'")
-    .replace(/[ \t]+\n/g, '\n')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
 }
 
 export function formatSalary(salary: SolidesSalary | undefined): string {
@@ -82,36 +47,10 @@ export function formatSalary(salary: SolidesSalary | undefined): string {
   return `${format(initialRange)} - ${format(finalRange as number)}`;
 }
 
-function isShoutingCase(value: string): boolean {
-  return value === value.toUpperCase() && /[a-z]/i.test(value);
-}
-
-/**
- * The portal mixes already well-cased city names ("Pau dos Ferros") with
- * SHOUTING ones ("NATAL"). Only the latter need fixing — re-title-casing an
- * already-correct name would wrongly capitalize words like "dos".
- */
-export function normalizeCityCasing(value: string): string {
-  const trimmed = value.trim();
-  if (!isShoutingCase(trimmed)) {
-    return trimmed;
-  }
-  return trimmed
-    .toLowerCase()
-    .replace(/(^|\s|\/)\S/g, (match) => match.toUpperCase());
-}
-
 export function buildLocation(vacancy: SolidesVacancy): string {
   const city = vacancy.city?.name ? normalizeCityCasing(vacancy.city.name) : '';
   const stateCode = vacancy.state?.code ?? '';
   return [city, stateCode].filter(Boolean).join(', ');
-}
-
-export function computeJobOpeningHash(
-  source: string,
-  externalId: string,
-): string {
-  return createHash('sha256').update(`${source}:${externalId}`).digest('hex');
 }
 
 /**

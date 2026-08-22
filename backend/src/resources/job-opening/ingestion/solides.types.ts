@@ -50,7 +50,4 @@ export interface SolidesVacanciesResponse {
   };
 }
 
-export interface IbgeMunicipio {
-  id: number;
-  nome: string;
-}
+export type { IbgeMunicipio } from './shared.util';

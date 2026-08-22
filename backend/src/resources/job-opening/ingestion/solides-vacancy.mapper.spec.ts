@@ -217,7 +217,9 @@ describe('buildSolidesCareersUrl', () => {
 
   it('falls back to the generic domain when there is no slug', () => {
     const vacancy = buildVacancy({ slug: null });
-    expect(buildSolidesCareersUrl(vacancy)).toBe('https://vagas.solides.com.br');
+    expect(buildSolidesCareersUrl(vacancy)).toBe(
+      'https://vagas.solides.com.br',
+    );
   });
 });
 
@@ -293,7 +295,9 @@ describe('mapSolidesVacancyToJobPosting', () => {
     expect(result.applicationInstructions).toBe(
       'elevesolucoes.vagas.solides.com.br',
     );
-    expect(result.storyFooterText).toBe('Siga @trabalharn e não perca as vagas');
+    expect(result.storyFooterText).toBe(
+      'Siga @trabalharn e não perca as vagas',
+    );
   });
 
   it('clamps vacancyCount to at least 1 when positions are missing', () => {
@@ -310,20 +314,17 @@ describe('mapSolidesVacancyToJobPosting', () => {
 
 describe('hasDisclosedCompany', () => {
   it('accepts a real company name', () => {
-    expect(hasDisclosedCompany(buildVacancy({ companyName: 'Multigiro' }))).toBe(
-      true,
-    );
+    expect(
+      hasDisclosedCompany(buildVacancy({ companyName: 'Multigiro' })),
+    ).toBe(true);
   });
 
-  it.each([
-    'Empresa confidencial',
-    'CONFIDENCIAL',
-    'confidencial',
-    '',
-    '   ',
-  ])('rejects a confidential or blank company name: %s', (companyName) => {
-    expect(hasDisclosedCompany(buildVacancy({ companyName }))).toBe(false);
-  });
+  it.each(['Empresa confidencial', 'CONFIDENCIAL', 'confidencial', '', '   '])(
+    'rejects a confidential or blank company name: %s',
+    (companyName) => {
+      expect(hasDisclosedCompany(buildVacancy({ companyName }))).toBe(false);
+    },
+  );
 
   it('rejects a missing companyName', () => {
     expect(
