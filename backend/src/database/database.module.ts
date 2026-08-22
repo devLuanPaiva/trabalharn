@@ -14,7 +14,7 @@ import { buildPostgresConnectionOptions } from './typeorm-options.factory';
           DB_PORT: configService.getOrThrow<number>('DB_PORT'),
           DB_USERNAME: configService.getOrThrow<string>('DB_USERNAME'),
           DB_PASSWORD: configService.getOrThrow<string>('DB_PASSWORD'),
-          DB_DATABASE: configService.getOrThrow<string>('DB_DATABASE'),
+          DB_NAME: configService.getOrThrow<string>('DB_NAME'),
           DB_SSL: configService.get<string>('DB_SSL'),
         }),
     }),

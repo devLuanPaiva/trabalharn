@@ -9,7 +9,7 @@ describe('validateEnv', () => {
       DB_PORT: '5432',
       DB_USERNAME: 'postgres',
       DB_PASSWORD: 'postgres',
-      DB_DATABASE: 'postgres',
+      DB_NAME: 'postgres',
       DB_SSL: 'false',
       ...overrides,
     };

@@ -11,7 +11,7 @@ export default new DataSource(
     DB_PORT: Number(process.env.DB_PORT ?? 5432),
     DB_USERNAME: process.env.DB_USERNAME ?? '',
     DB_PASSWORD: process.env.DB_PASSWORD ?? '',
-    DB_DATABASE: process.env.DB_DATABASE ?? '',
+    DB_NAME: process.env.DB_NAME ?? '',
     DB_SSL: process.env.DB_SSL,
   }),
 );

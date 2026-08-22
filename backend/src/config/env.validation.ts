@@ -42,7 +42,7 @@ export class EnvironmentVariables {
   DB_PASSWORD: string;
 
   @IsString()
-  DB_DATABASE: string;
+  DB_NAME: string;
 
   @IsOptional()
   @IsString()

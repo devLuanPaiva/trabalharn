@@ -6,7 +6,7 @@ export interface DatabaseEnvironment {
   DB_PORT: number;
   DB_USERNAME: string;
   DB_PASSWORD: string;
-  DB_DATABASE: string;
+  DB_NAME: string;
   DB_SSL?: string;
 }
 
@@ -19,7 +19,7 @@ export function buildPostgresConnectionOptions(
     port: env.DB_PORT,
     username: env.DB_USERNAME,
     password: env.DB_PASSWORD,
-    database: env.DB_DATABASE,
+    database: env.DB_NAME,
     ssl: env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
     uuidExtension: 'pgcrypto',
     entities: [join(__dirname, '..', '**', '*.entity.{ts,js}')],
