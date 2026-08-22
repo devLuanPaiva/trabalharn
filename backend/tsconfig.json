@@ -33,26 +33,11 @@
       "@database/*": [
         "./src/database/*"
       ],
-      "@decorators/*": [
-        "./src/decorators/*"
-      ],
-      "@filters/*": [
-        "./src/filters/*"
-      ],
-      "@guards/*": [
-        "./src/guards/*"
-      ],
-      "@interceptors/*": [
-        "./src/interceptors/*"
-      ],
       "@resources/*": [
         "./src/resources/*"
       ],
-      "@scripts/*": [
-        "./src/scripts/*"
-      ],
-      "@functions/*": [
-        "./src/functions/*"
+      "@config/*": [
+        "./src/config/*"
       ]
     }
   },
