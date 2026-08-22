@@ -6,6 +6,7 @@ import { validateEnv } from './config/env.validation';
 import { DatabaseModule } from './database/database.module';
 import { JobOpeningModule } from './resources/job-opening/job-opening.module';
 import { PostGeneratorModule } from './resources/post-generator/post-generator.module';
+import { UploadsModule } from './resources/uploads/uploads.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { PostGeneratorModule } from './resources/post-generator/post-generator.m
     DatabaseModule,
     PostGeneratorModule,
     JobOpeningModule,
+    UploadsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

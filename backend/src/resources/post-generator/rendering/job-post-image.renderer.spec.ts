@@ -23,6 +23,7 @@ describe('JobPostImageRenderer', () => {
     city: 'Natal / RN',
     contractType: 'CLT',
     salary: 'R$ 1.800 + benefícios',
+    workplaceType: 'Presencial',
     workSchedule: 'Seg a sex, 8h às 17h',
     vacancyCount: 3,
     requirements: [

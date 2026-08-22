@@ -4,10 +4,12 @@ import {
   Entity,
   Index,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity({ name: 'job_openings' })
+@Unique('UQ_job_openings_source_external_id', ['source', 'externalId'])
 export class JobOpening {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -84,6 +86,35 @@ export class JobOpening {
 
   @Column({ name: 'published_at', type: 'timestamptz', nullable: true })
   publishedAt: Date | null;
+
+  @Column({
+    name: 'facebook_post_id',
+    type: 'varchar',
+    length: 120,
+    nullable: true,
+  })
+  facebookPostId: string | null;
+
+  @Column({
+    name: 'instagram_media_id',
+    type: 'varchar',
+    length: 120,
+    nullable: true,
+  })
+  instagramMediaId: string | null;
+
+  /**
+   * Snapshot of the JobPostingDto sent to /post-generator/generate at
+   * ingestion time, replayed by the publish queue — which can run hours
+   * after ingestion — so the art/caption stay reproducible without
+   * re-deriving them from the (possibly since-changed) source portal data.
+   */
+  @Column({
+    name: 'post_generator_payload',
+    type: 'jsonb',
+    nullable: true,
+  })
+  postGeneratorPayload: Record<string, unknown> | null;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;

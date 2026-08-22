@@ -42,11 +42,27 @@ export class EnvironmentVariables {
   DB_PASSWORD: string;
 
   @IsString()
-  DB_DATABASE: string;
+  DB_NAME: string;
 
   @IsOptional()
   @IsString()
   DB_SSL?: string;
+
+  @IsOptional()
+  @IsString()
+  AWS_REGION?: string;
+
+  @IsOptional()
+  @IsString()
+  AWS_ACCESS_KEY_ID?: string;
+
+  @IsOptional()
+  @IsString()
+  AWS_SECRET_ACCESS_KEY?: string;
+
+  @IsOptional()
+  @IsString()
+  AWS_S3_BUCKET?: string;
 }
 
 export function validateEnv(

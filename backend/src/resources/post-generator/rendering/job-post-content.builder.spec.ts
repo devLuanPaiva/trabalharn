@@ -56,11 +56,16 @@ describe('buildJobPostBadges', () => {
 describe('buildJobPostDetailRows', () => {
   it('includes only the rows for fields that were informed, in a fixed order', () => {
     const rows = buildJobPostDetailRows(
-      buildJobPosting({ workSchedule: 'Seg a sex', city: 'Mossoró / RN' }),
+      buildJobPosting({
+        workplaceType: 'Remoto',
+        workSchedule: 'Seg a sex',
+        city: 'Mossoró / RN',
+      }),
     );
 
     expect(rows).toEqual([
       { icon: 'pin', label: 'LOCAL', value: 'Mossoró / RN' },
+      { icon: 'case', label: 'MODALIDADE', value: 'Remoto' },
       { icon: 'clock', label: 'HORÁRIO', value: 'Seg a sex' },
     ]);
   });

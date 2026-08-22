@@ -21,6 +21,10 @@ services:
       # service. host.docker.internal resolves to the host machine from
       # inside the container.
       - BACKEND_API_URL=${BACKEND_API_URL:-http://host.docker.internal:3001}
+      # Meta Graph API — used by the publish workflow's HTTP Request nodes.
+      - PAGE_ACCESS_TOKEN=${PAGE_ACCESS_TOKEN}
+      - PAGE_ID=${PAGE_ID}
+      - IG_USER_ID=${IG_USER_ID}
     volumes:
       - n8n_data:/home/node/.n8n
     extra_hosts:

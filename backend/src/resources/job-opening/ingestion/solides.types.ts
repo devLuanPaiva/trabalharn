@@ -28,6 +28,7 @@ export interface SolidesVacancy {
   state: SolidesLocationRef;
   city: SolidesLocationRef;
   redirectLink: string;
+  slug?: string | null;
   jobType?: string;
   homeOffice?: boolean;
   openPositions?: number;
@@ -49,7 +50,4 @@ export interface SolidesVacanciesResponse {
   };
 }
 
-export interface IbgeMunicipio {
-  id: number;
-  nome: string;
-}
+export type { IbgeMunicipio } from './shared.util';

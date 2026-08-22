@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { JobOpening } from './entities/job-opening.entity';
 import { JobOpeningRepository } from './job-opening.repository';
 
@@ -21,6 +21,9 @@ describe('JobOpeningRepository', () => {
       postUrl: 'https://exemplo.com/vaga/1',
       hash: 'hash-1',
       publishedAt: null,
+      facebookPostId: null,
+      instagramMediaId: null,
+      postGeneratorPayload: null,
       createdAt: new Date('2026-01-01T00:00:00.000Z'),
       updatedAt: new Date('2026-01-01T00:00:00.000Z'),
       ...overrides,
@@ -32,6 +35,7 @@ describe('JobOpeningRepository', () => {
       create: jest.fn(),
       save: jest.fn(),
       findOneBy: jest.fn(),
+      findOne: jest.fn(),
       findAndCount: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
@@ -100,6 +104,62 @@ describe('JobOpeningRepository', () => {
       hash: 'unique-hash',
     });
     expect(result).toBe(jobOpening);
+  });
+
+  it('finds a job opening by source and externalId', async () => {
+    const typeOrmRepository = buildTypeOrmRepositoryMock();
+    const jobOpening = buildJobOpening({ externalId: '908125' });
+    typeOrmRepository.findOneBy.mockResolvedValue(jobOpening);
+    const repository = new JobOpeningRepository(typeOrmRepository);
+
+    const result = await repository.findBySourceAndExternalId(
+      'solides',
+      '908125',
+    );
+
+    expect(typeOrmRepository.findOneBy).toHaveBeenCalledWith({
+      source: 'solides',
+      externalId: '908125',
+    });
+    expect(result).toBe(jobOpening);
+  });
+
+  it('returns null when no job opening matches source and externalId', async () => {
+    const typeOrmRepository = buildTypeOrmRepositoryMock();
+    typeOrmRepository.findOneBy.mockResolvedValue(null);
+    const repository = new JobOpeningRepository(typeOrmRepository);
+
+    const result = await repository.findBySourceAndExternalId(
+      'solides',
+      'missing',
+    );
+
+    expect(result).toBeNull();
+  });
+
+  it('finds the oldest job opening without a facebookPostId', async () => {
+    const typeOrmRepository = buildTypeOrmRepositoryMock();
+    const jobOpening = buildJobOpening();
+    typeOrmRepository.findOne.mockResolvedValue(jobOpening);
+    const repository = new JobOpeningRepository(typeOrmRepository);
+
+    const result = await repository.findNextUnpublished();
+
+    expect(typeOrmRepository.findOne).toHaveBeenCalledWith({
+      where: [{ facebookPostId: IsNull() }, { instagramMediaId: IsNull() }],
+      order: { createdAt: 'ASC' },
+    });
+    expect(result).toBe(jobOpening);
+  });
+
+  it('returns null when there is nothing pending to publish', async () => {
+    const typeOrmRepository = buildTypeOrmRepositoryMock();
+    typeOrmRepository.findOne.mockResolvedValue(null);
+    const repository = new JobOpeningRepository(typeOrmRepository);
+
+    const result = await repository.findNextUnpublished();
+
+    expect(result).toBeNull();
   });
 
   it('delegates findAndCount to the underlying repository', async () => {

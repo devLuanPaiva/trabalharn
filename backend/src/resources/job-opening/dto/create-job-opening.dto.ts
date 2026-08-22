@@ -3,6 +3,7 @@ import { Type } from 'class-transformer';
 import {
   IsDate,
   IsEmail,
+  IsObject,
   IsOptional,
   IsString,
   IsUrl,
@@ -99,4 +100,31 @@ export class CreateJobOpeningDto {
   @Type(() => Date)
   @IsDate()
   publishedAt?: Date;
+
+  @ApiPropertyOptional({
+    maxLength: 120,
+    description: 'Facebook Graph API post id, set after publishing to the page',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  facebookPostId?: string;
+
+  @ApiPropertyOptional({
+    maxLength: 120,
+    description:
+      'Instagram Graph API media id, set after publishing to the account',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  instagramMediaId?: string;
+
+  @ApiPropertyOptional({
+    description:
+      'Snapshot of the JobPostingDto sent to /post-generator/generate, replayed later by the publish queue',
+  })
+  @IsOptional()
+  @IsObject()
+  postGeneratorPayload?: Record<string, unknown>;
 }

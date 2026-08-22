@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, FindManyOptions, Repository } from 'typeorm';
+import { DeepPartial, FindManyOptions, IsNull, Repository } from 'typeorm';
 import { JobOpening } from './entities/job-opening.entity';
 
 @Injectable()
@@ -24,6 +24,20 @@ export class JobOpeningRepository {
 
   findByHash(hash: string): Promise<JobOpening | null> {
     return this.repository.findOneBy({ hash });
+  }
+
+  findBySourceAndExternalId(
+    source: string,
+    externalId: string,
+  ): Promise<JobOpening | null> {
+    return this.repository.findOneBy({ source, externalId });
+  }
+
+  findNextUnpublished(): Promise<JobOpening | null> {
+    return this.repository.findOne({
+      where: [{ facebookPostId: IsNull() }, { instagramMediaId: IsNull() }],
+      order: { createdAt: 'ASC' },
+    });
   }
 
   findAndCount(
