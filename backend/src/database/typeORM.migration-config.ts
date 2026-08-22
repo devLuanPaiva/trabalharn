@@ -9,6 +9,7 @@ const getDatabaseConfig = () => {
 
     if (databaseUrl) {
         const url = new URL(databaseUrl);
+        const sslRequired = url.searchParams.get("sslmode") === "require";
         return {
             type: "postgres" as const,
             host: url.hostname,
@@ -17,7 +18,7 @@ const getDatabaseConfig = () => {
             password: url.password,
             database: url.pathname.slice(1),
             schema: "public",
-            ssl: url.searchParams.get("sslmode") === "require",
+            ssl: sslRequired ? { rejectUnauthorized: false } : false,
         };
     }
 
@@ -29,7 +30,7 @@ const getDatabaseConfig = () => {
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME,
         schema: "public",
-        ssl: false,
+        ssl: process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : false,
     };
 };
 

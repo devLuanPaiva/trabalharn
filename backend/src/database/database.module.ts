@@ -13,6 +13,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
         if (databaseUrl) {
           const url = new URL(databaseUrl);
+          const sslRequired = url.searchParams.get('sslmode') === 'require';
           return {
             type: 'postgres' as const,
             host: url.hostname,
@@ -25,9 +26,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
             entities: [__dirname + '/../**/*.entity.{ts,js}'],
             migrations: [__dirname + '/migrations/*{.ts,.js}'],
             synchronize: false,
-            ssl: url.searchParams.get('sslmode') === 'require',
+            ssl: sslRequired ? { rejectUnauthorized: false } : false,
           };
         }
+
+        const sslEnabled = configService.get<string>('DB_SSL') === 'true';
 
         return {
           type: 'postgres' as const,
@@ -41,7 +44,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           entities: [__dirname + '/../**/*.entity.{ts,js}'],
           migrations: [__dirname + '/migrations/*{.ts,.js}'],
           synchronize: false,
-          ssl: false,
+          ssl: sslEnabled ? { rejectUnauthorized: false } : false,
         };
       },
       inject: [ConfigService],
