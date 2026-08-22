@@ -24,6 +24,9 @@ export function buildJobPostCaption(jobPosting: JobPostingData): string {
   if (jobPosting.salary) {
     lines.push(`💰 ${jobPosting.salary}`);
   }
+  if (jobPosting.workplaceType) {
+    lines.push(`🏠 ${jobPosting.workplaceType}`);
+  }
   if (jobPosting.workSchedule) {
     lines.push(`⏰ ${jobPosting.workSchedule}`);
   }
@@ -50,9 +53,6 @@ function buildVacancySuffix(vacancyCount: number | undefined): string {
 function buildCityHashtag(city: string | undefined): string {
   // City comes as either "City / UF" or "City, UF" depending on the source
   // (Solides' ingestion mapper joins with ", ").
-  const cityTag = (city ?? '')
-    .split(/[/,]/)[0]
-    .trim()
-    .replace(/\s+/g, '');
+  const cityTag = (city ?? '').split(/[/,]/)[0].trim().replace(/\s+/g, '');
   return cityTag ? ` #${cityTag}` : '';
 }

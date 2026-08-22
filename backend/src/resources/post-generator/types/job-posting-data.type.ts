@@ -4,6 +4,7 @@ export interface JobPostingData {
   city?: string;
   contractType?: string;
   salary?: string;
+  workplaceType?: string;
   workSchedule?: string;
   vacancyCount?: number;
   requirements?: string[];

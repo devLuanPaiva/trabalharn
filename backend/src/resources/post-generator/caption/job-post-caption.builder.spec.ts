@@ -16,6 +16,7 @@ describe('buildJobPostCaption', () => {
         contractType: 'CLT',
         vacancyCount: 3,
         salary: 'R$ 1.800 + benefícios',
+        workplaceType: 'Presencial',
         workSchedule: 'Seg a sex, 8h às 17h',
         requirements: ['Ensino médio completo', 'Pacote Office intermediário'],
         applicationInstructions: 'Envie o currículo para vagas@empresa.com.br',
@@ -29,6 +30,7 @@ describe('buildJobPostCaption', () => {
         '📍 Natal / RN',
         '💼 CLT — 3 vagas',
         '💰 R$ 1.800 + benefícios',
+        '🏠 Presencial',
         '⏰ Seg a sex, 8h às 17h',
         '',
         '✅ Requisitos:',
@@ -40,6 +42,24 @@ describe('buildJobPostCaption', () => {
         '#TrabalhaRN #VagasRN #EmpregoRN #RioGrandeDoNorte #Natal',
       ].join('\n'),
     );
+  });
+
+  it('shows only workplaceType when there is no real schedule', () => {
+    const caption = buildJobPostCaption(
+      buildJobPosting({ workplaceType: 'Remoto' }),
+    );
+
+    expect(caption).toContain('🏠 Remoto');
+    expect(caption).not.toContain('⏰');
+  });
+
+  it('shows only workSchedule when there is no workplaceType', () => {
+    const caption = buildJobPostCaption(
+      buildJobPosting({ workSchedule: 'Seg a sex, 8h às 17h' }),
+    );
+
+    expect(caption).toContain('⏰ Seg a sex, 8h às 17h');
+    expect(caption).not.toContain('🏠');
   });
 
   it('omits the vacancy suffix when there is only one vacancy', () => {

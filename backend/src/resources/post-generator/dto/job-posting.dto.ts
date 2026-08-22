@@ -40,6 +40,11 @@ export class JobPostingDto {
   @IsOptional()
   @IsString()
   @MaxLength(60)
+  workplaceType?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(60)
   workSchedule?: string;
 
   @IsOptional()

@@ -49,6 +49,13 @@ export function buildJobPostDetailRows(
   if (jobPosting.salary) {
     rows.push({ icon: 'money', label: 'SALÁRIO', value: jobPosting.salary });
   }
+  if (jobPosting.workplaceType) {
+    rows.push({
+      icon: 'case',
+      label: 'MODALIDADE',
+      value: jobPosting.workplaceType,
+    });
+  }
   if (jobPosting.workSchedule) {
     rows.push({
       icon: 'clock',
