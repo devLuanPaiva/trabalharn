@@ -78,3 +78,23 @@ export function computeJobOpeningHash(
 ): string {
   return createHash('sha256').update(`${source}:${externalId}`).digest('hex');
 }
+
+const WORKPLACE_TYPE_LABELS: Record<string, string> = {
+  'on-site': 'Presencial',
+  presencial: 'Presencial',
+  remote: 'Remoto',
+  remoto: 'Remoto',
+  hybrid: 'Híbrido',
+  híbrido: 'Híbrido',
+  hibrido: 'Híbrido',
+};
+
+export function translateWorkplaceType(
+  rawValue: string | undefined,
+): string | undefined {
+  if (!rawValue) {
+    return undefined;
+  }
+  const normalized = rawValue.trim().toLowerCase();
+  return WORKPLACE_TYPE_LABELS[normalized] ?? rawValue;
+}

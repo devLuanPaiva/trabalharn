@@ -249,7 +249,7 @@ describe('mapSolidesVacancyToJobOpening', () => {
     expect(result.postUrl).toBe('https://elevesolucoes.vagas.solides.com.br');
     expect(result.hash).toBe(computeJobOpeningHash('solides', '904705'));
     expect(result.wage).toBe('A combinar');
-    expect(result.workingHours).toBe('presencial');
+    expect(result.workingHours).toBe('Presencial');
     expect(result.contractType).toBe('Estágio');
     expect(result.location).toBe('Natal, RN');
     expect(result.requirements).toBe('Boa comunicação');
@@ -292,6 +292,7 @@ describe('mapSolidesVacancyToJobPosting', () => {
       expect(requirement.length).toBeLessThanOrEqual(100);
     });
     expect(result.vacancyCount).toBe(999);
+    expect(result.workplaceType).toBe('Presencial');
     expect(result.applicationInstructions).toBe(
       'elevesolucoes.vagas.solides.com.br',
     );

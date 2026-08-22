@@ -6,6 +6,7 @@ import {
   isRnMunicipality,
   normalizeCityCasing,
   stripHtml,
+  translateWorkplaceType,
 } from './shared.util';
 import {
   SolidesSalary,
@@ -88,7 +89,7 @@ export function mapSolidesVacancyToJobOpening(
     description: stripHtml(vacancy.description) || undefined,
     requirements,
     wage: formatSalary(vacancy.salary).slice(0, 120),
-    workingHours: vacancy.jobType?.slice(0, 120),
+    workingHours: translateWorkplaceType(vacancy.jobType)?.slice(0, 120),
     contractType: contractType?.slice(0, 60),
     location: buildLocation(vacancy).slice(0, 160) || undefined,
     companyName: vacancy.companyName?.slice(0, 160),
@@ -115,7 +116,7 @@ export function mapSolidesVacancyToJobPosting(
     city: buildLocation(vacancy).slice(0, 60) || undefined,
     contractType: contractType?.slice(0, 40),
     salary: formatSalary(vacancy.salary).slice(0, 60),
-    workSchedule: vacancy.jobType?.slice(0, 60),
+    workplaceType: translateWorkplaceType(vacancy.jobType)?.slice(0, 60),
     vacancyCount,
     requirements: vacancy.hardSkills
       ?.slice(0, 5)
