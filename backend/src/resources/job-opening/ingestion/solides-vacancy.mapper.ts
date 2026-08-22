@@ -125,6 +125,14 @@ export function buildSolidesCareersUrl(vacancy: SolidesVacancy): string {
     : 'https://vagas.solides.com.br';
 }
 
+/**
+ * Bare domain (no protocol) for display in captions/art — links aren't
+ * clickable on Instagram anyway, so the "https://" is just noise there.
+ */
+export function buildSolidesCareersDomain(vacancy: SolidesVacancy): string {
+  return buildSolidesCareersUrl(vacancy).replace(/^https?:\/\//, '');
+}
+
 export function mapSolidesVacancyToJobOpening(
   vacancy: SolidesVacancy,
 ): CreateJobOpeningDto {
@@ -173,7 +181,7 @@ export function mapSolidesVacancyToJobPosting(
     requirements: vacancy.hardSkills
       ?.slice(0, 5)
       .map((skill) => skill.name.slice(0, 100)),
-    applicationInstructions: vacancy.redirectLink.slice(0, 140),
+    applicationInstructions: buildSolidesCareersDomain(vacancy).slice(0, 140),
     storyFooterText: STORY_FOOTER_TEXT,
   };
 }

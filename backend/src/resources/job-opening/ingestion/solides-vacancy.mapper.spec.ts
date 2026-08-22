@@ -1,5 +1,6 @@
 import {
   buildLocation,
+  buildSolidesCareersDomain,
   buildSolidesCareersUrl,
   computeJobOpeningHash,
   filterAndMapRnVacancies,
@@ -219,6 +220,20 @@ describe('buildSolidesCareersUrl', () => {
   });
 });
 
+describe('buildSolidesCareersDomain', () => {
+  it('strips the protocol for display in captions/art', () => {
+    const vacancy = buildVacancy({ slug: 'elevesolucoes' });
+    expect(buildSolidesCareersDomain(vacancy)).toBe(
+      'elevesolucoes.vagas.solides.com.br',
+    );
+  });
+
+  it('strips the protocol from the fallback domain too', () => {
+    const vacancy = buildVacancy({ slug: null });
+    expect(buildSolidesCareersDomain(vacancy)).toBe('vagas.solides.com.br');
+  });
+});
+
 describe('mapSolidesVacancyToJobOpening', () => {
   it('maps a vacancy into a CreateJobOpeningDto shape', () => {
     const vacancy = buildVacancy();
@@ -274,7 +289,9 @@ describe('mapSolidesVacancyToJobPosting', () => {
       expect(requirement.length).toBeLessThanOrEqual(100);
     });
     expect(result.vacancyCount).toBe(999);
-    expect(result.applicationInstructions).toBe(vacancy.redirectLink);
+    expect(result.applicationInstructions).toBe(
+      'elevesolucoes.vagas.solides.com.br',
+    );
     expect(result.storyFooterText).toBe('Siga @trabalharn e não perca as vagas');
   });
 
