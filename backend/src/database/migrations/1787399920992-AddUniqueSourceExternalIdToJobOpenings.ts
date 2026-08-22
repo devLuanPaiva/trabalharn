@@ -1,8 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class AddUniqueSourceExternalIdToJobOpenings1787399920992
-  implements MigrationInterface
-{
+export class AddUniqueSourceExternalIdToJobOpenings1787399920992 implements MigrationInterface {
   name = 'AddUniqueSourceExternalIdToJobOpenings1787399920992';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

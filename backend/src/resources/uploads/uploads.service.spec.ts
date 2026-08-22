@@ -24,7 +24,9 @@ describe('UploadsService', () => {
     } as unknown as jest.Mocked<ConfigService>;
   }
 
-  function buildDto(overrides: Partial<PresignUploadDto> = {}): PresignUploadDto {
+  function buildDto(
+    overrides: Partial<PresignUploadDto> = {},
+  ): PresignUploadDto {
     return {
       key: 'posts/feed/908125.png',
       contentType: 'image/png',
@@ -59,7 +61,8 @@ describe('UploadsService', () => {
     expect(result).toEqual({
       uploadUrl:
         'https://trabalharn.s3.us-east-1.amazonaws.com/posts/feed/908125.png?X-Amz-Signature=abc',
-      publicUrl: 'https://trabalharn.s3.us-east-1.amazonaws.com/posts/feed/908125.png',
+      publicUrl:
+        'https://trabalharn.s3.us-east-1.amazonaws.com/posts/feed/908125.png',
     });
   });
 

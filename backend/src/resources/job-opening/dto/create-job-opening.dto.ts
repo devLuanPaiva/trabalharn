@@ -112,7 +112,8 @@ export class CreateJobOpeningDto {
 
   @ApiPropertyOptional({
     maxLength: 120,
-    description: 'Instagram Graph API media id, set after publishing to the account',
+    description:
+      'Instagram Graph API media id, set after publishing to the account',
   })
   @IsOptional()
   @IsString()

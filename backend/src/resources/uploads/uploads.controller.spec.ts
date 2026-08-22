@@ -17,8 +17,10 @@ describe('UploadsController', () => {
       contentType: 'image/png',
     };
     const response: PresignedUploadResponseDto = {
-      uploadUrl: 'https://trabalharn.s3.us-east-1.amazonaws.com/posts/story/908125.png?sig=abc',
-      publicUrl: 'https://trabalharn.s3.us-east-1.amazonaws.com/posts/story/908125.png',
+      uploadUrl:
+        'https://trabalharn.s3.us-east-1.amazonaws.com/posts/story/908125.png?sig=abc',
+      publicUrl:
+        'https://trabalharn.s3.us-east-1.amazonaws.com/posts/story/908125.png',
     };
     service.presignUpload.mockResolvedValue(response);
     const controller = new UploadsController(service);

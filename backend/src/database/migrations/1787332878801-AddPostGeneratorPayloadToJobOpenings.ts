@@ -1,8 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class AddPostGeneratorPayloadToJobOpenings1787332878801
-  implements MigrationInterface
-{
+export class AddPostGeneratorPayloadToJobOpenings1787332878801 implements MigrationInterface {
   name = 'AddPostGeneratorPayloadToJobOpenings1787332878801';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

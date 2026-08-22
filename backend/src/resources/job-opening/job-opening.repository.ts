@@ -35,10 +35,7 @@ export class JobOpeningRepository {
 
   findNextUnpublished(): Promise<JobOpening | null> {
     return this.repository.findOne({
-      where: [
-        { facebookPostId: IsNull() },
-        { instagramMediaId: IsNull() },
-      ],
+      where: [{ facebookPostId: IsNull() }, { instagramMediaId: IsNull() }],
       order: { createdAt: 'ASC' },
     });
   }

@@ -11,12 +11,9 @@ export class UploadsController {
 
   @Post('presign')
   @ApiOperation({
-    summary:
-      'Get a presigned S3 PUT URL for uploading a generated post image',
+    summary: 'Get a presigned S3 PUT URL for uploading a generated post image',
   })
-  presign(
-    @Body() dto: PresignUploadDto,
-  ): Promise<PresignedUploadResponseDto> {
+  presign(@Body() dto: PresignUploadDto): Promise<PresignedUploadResponseDto> {
     return this.uploadsService.presignUpload(dto);
   }
 }

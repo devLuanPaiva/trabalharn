@@ -1,8 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class AddSocialPostIdsToJobOpenings1787314334496
-  implements MigrationInterface
-{
+export class AddSocialPostIdsToJobOpenings1787314334496 implements MigrationInterface {
   name = 'AddSocialPostIdsToJobOpenings1787314334496';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

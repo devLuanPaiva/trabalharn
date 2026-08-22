@@ -16,9 +16,7 @@ export class JobOpeningService {
   constructor(private readonly jobOpeningRepository: JobOpeningRepository) {}
 
   async create(dto: CreateJobOpeningDto): Promise<JobOpening> {
-    const existingByHash = await this.jobOpeningRepository.findByHash(
-      dto.hash,
-    );
+    const existingByHash = await this.jobOpeningRepository.findByHash(dto.hash);
     if (existingByHash) {
       throw new ConflictException(
         `Job opening with hash "${dto.hash}" already exists`,
