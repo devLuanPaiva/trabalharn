@@ -1,6 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+// TypeORM loads the `pg` driver via a dynamic require() at runtime, which
+// Vercel's build-time dependency tracer can't detect, so it gets dropped
+// from the deployed bundle. A static import here forces it to be included.
+import 'pg';
 
 @Module({
   imports: [

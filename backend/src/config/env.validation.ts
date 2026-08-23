@@ -27,22 +27,31 @@ export class EnvironmentVariables {
   @Max(65535)
   PORT: number = 3001;
 
+  @IsOptional()
   @IsString()
-  DB_HOST: string;
+  DATABASE_URL?: string;
 
+  @IsOptional()
+  @IsString()
+  DB_HOST?: string;
+
+  @IsOptional()
   @IsInt()
   @Min(1)
   @Max(65535)
-  DB_PORT: number;
+  DB_PORT?: number;
 
+  @IsOptional()
   @IsString()
-  DB_USERNAME: string;
+  DB_USERNAME?: string;
 
+  @IsOptional()
   @IsString()
-  DB_PASSWORD: string;
+  DB_PASSWORD?: string;
 
+  @IsOptional()
   @IsString()
-  DB_DATABASE: string;
+  DB_NAME?: string;
 
   @IsOptional()
   @IsString()

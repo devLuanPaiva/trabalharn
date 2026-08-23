@@ -9,7 +9,7 @@ describe('validateEnv', () => {
       DB_PORT: '5432',
       DB_USERNAME: 'postgres',
       DB_PASSWORD: 'postgres',
-      DB_DATABASE: 'postgres',
+      DB_NAME: 'postgres',
       DB_SSL: 'false',
       ...overrides,
     };
@@ -34,11 +34,14 @@ describe('validateEnv', () => {
     expect(result.PORT).toBe(3001);
   });
 
-  it('throws when a required database variable is missing', () => {
-    const raw = buildRawEnv();
+  it('does not throw when DB_* variables are omitted in favor of DATABASE_URL', () => {
+    const raw = buildRawEnv({ DATABASE_URL: 'postgres://user:pass@host:5432/db' });
     delete (raw as Record<string, string | undefined>).DB_HOST;
+    delete (raw as Record<string, string | undefined>).DB_USERNAME;
+    delete (raw as Record<string, string | undefined>).DB_PASSWORD;
+    delete (raw as Record<string, string | undefined>).DB_NAME;
 
-    expect(() => validateEnv(raw)).toThrow('Invalid environment variables');
+    expect(() => validateEnv(raw)).not.toThrow();
   });
 
   it('throws when DB_PORT is not a valid integer', () => {
