@@ -70,6 +70,12 @@ describe('buildJobPostCaption', () => {
     expect(caption.endsWith('#RioGrandeDoNorte #CurraisNovos')).toBe(true);
   });
 
+  it('derives the city hashtag from a comma-separated "City, UF" (Solides format)', () => {
+    const caption = buildJobPostCaption(buildJobPosting({ city: 'Natal, RN' }));
+
+    expect(caption.endsWith('#RioGrandeDoNorte #Natal')).toBe(true);
+  });
+
   it('caps requirements at 5 items, matching the generated image', () => {
     const caption = buildJobPostCaption(
       buildJobPosting({ requirements: ['1', '2', '3', '4', '5', '6'] }),

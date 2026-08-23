@@ -48,6 +48,9 @@ function buildVacancySuffix(vacancyCount: number | undefined): string {
 }
 
 function buildCityHashtag(city: string | undefined): string {
-  const cityTag = (city ?? '').split('/')[0].trim().replace(/\s+/g, '');
+  const cityTag = (city ?? '')
+    .split(/[/,]/)[0]
+    .trim()
+    .replace(/\s+/g, '');
   return cityTag ? ` #${cityTag}` : '';
 }
