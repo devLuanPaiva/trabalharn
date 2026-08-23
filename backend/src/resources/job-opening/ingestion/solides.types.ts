@@ -28,6 +28,7 @@ export interface SolidesVacancy {
   state: SolidesLocationRef;
   city: SolidesLocationRef;
   redirectLink: string;
+  slug?: string | null;
   jobType?: string;
   homeOffice?: boolean;
   openPositions?: number;
