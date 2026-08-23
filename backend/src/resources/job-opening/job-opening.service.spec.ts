@@ -25,6 +25,9 @@ describe('JobOpeningService', () => {
       postUrl: 'https://exemplo.com/vaga/1',
       hash: 'hash-1',
       publishedAt: null,
+      facebookPostId: null,
+      instagramMediaId: null,
+      postGeneratorPayload: null,
       createdAt: new Date('2026-01-01T00:00:00.000Z'),
       updatedAt: new Date('2026-01-01T00:00:00.000Z'),
       ...overrides,
@@ -48,6 +51,8 @@ describe('JobOpeningService', () => {
       save: jest.fn(),
       findById: jest.fn(),
       findByHash: jest.fn(),
+      findBySourceAndExternalId: jest.fn(),
+      findNextUnpublished: jest.fn(),
       findAndCount: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
@@ -83,6 +88,55 @@ describe('JobOpeningService', () => {
       );
       expect(repository.create).not.toHaveBeenCalled();
       expect(repository.save).not.toHaveBeenCalled();
+    });
+
+    it('creates a job opening when externalId is provided and not already taken', async () => {
+      const repository = buildRepositoryMock();
+      const dto = buildCreateDto({ externalId: '908125' });
+      const created = buildJobOpening({ externalId: '908125' });
+      repository.findByHash.mockResolvedValue(null);
+      repository.findBySourceAndExternalId.mockResolvedValue(null);
+      repository.create.mockReturnValue(created);
+      repository.save.mockResolvedValue(created);
+      const service = new JobOpeningService(repository);
+
+      const result = await service.create(dto);
+
+      expect(repository.findBySourceAndExternalId).toHaveBeenCalledWith(
+        'gupy',
+        '908125',
+      );
+      expect(result).toBe(created);
+    });
+
+    it('throws ConflictException when the (source, externalId) pair already exists', async () => {
+      const repository = buildRepositoryMock();
+      const dto = buildCreateDto({ externalId: '908125' });
+      repository.findByHash.mockResolvedValue(null);
+      repository.findBySourceAndExternalId.mockResolvedValue(
+        buildJobOpening({ externalId: '908125' }),
+      );
+      const service = new JobOpeningService(repository);
+
+      await expect(service.create(dto)).rejects.toBeInstanceOf(
+        ConflictException,
+      );
+      expect(repository.create).not.toHaveBeenCalled();
+      expect(repository.save).not.toHaveBeenCalled();
+    });
+
+    it('skips the externalId check when externalId is not provided', async () => {
+      const repository = buildRepositoryMock();
+      const dto = buildCreateDto();
+      const created = buildJobOpening();
+      repository.findByHash.mockResolvedValue(null);
+      repository.create.mockReturnValue(created);
+      repository.save.mockResolvedValue(created);
+      const service = new JobOpeningService(repository);
+
+      await service.create(dto);
+
+      expect(repository.findBySourceAndExternalId).not.toHaveBeenCalled();
     });
   });
 
@@ -134,6 +188,29 @@ describe('JobOpeningService', () => {
         skip: 0,
         take: 20,
       });
+    });
+  });
+
+  describe('findNextUnpublished', () => {
+    it('returns the job opening from the repository', async () => {
+      const repository = buildRepositoryMock();
+      const jobOpening = buildJobOpening();
+      repository.findNextUnpublished.mockResolvedValue(jobOpening);
+      const service = new JobOpeningService(repository);
+
+      const result = await service.findNextUnpublished();
+
+      expect(result).toBe(jobOpening);
+    });
+
+    it('returns null when nothing is pending', async () => {
+      const repository = buildRepositoryMock();
+      repository.findNextUnpublished.mockResolvedValue(null);
+      const service = new JobOpeningService(repository);
+
+      const result = await service.findNextUnpublished();
+
+      expect(result).toBeNull();
     });
   });
 

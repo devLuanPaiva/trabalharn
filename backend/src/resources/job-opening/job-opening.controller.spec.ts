@@ -25,6 +25,9 @@ describe('JobOpeningController', () => {
       postUrl: 'https://exemplo.com/vaga/1',
       hash: 'hash-1',
       publishedAt: null,
+      facebookPostId: null,
+      instagramMediaId: null,
+      postGeneratorPayload: null,
       createdAt: new Date('2026-01-01T00:00:00.000Z'),
       updatedAt: new Date('2026-01-01T00:00:00.000Z'),
       ...overrides,
@@ -35,6 +38,7 @@ describe('JobOpeningController', () => {
     return {
       create: jest.fn(),
       findAll: jest.fn(),
+      findNextUnpublished: jest.fn(),
       findOne: jest.fn(),
       update: jest.fn(),
       remove: jest.fn(),
@@ -72,6 +76,27 @@ describe('JobOpeningController', () => {
     expect(result).toBe(paginated);
   });
 
+  it('wraps the next unpublished job opening from the service', async () => {
+    const service = buildServiceMock();
+    const jobOpening = buildJobOpening();
+    service.findNextUnpublished.mockResolvedValue(jobOpening);
+    const controller = new JobOpeningController(service);
+
+    const result = await controller.findNextUnpublished();
+
+    expect(result).toEqual({ jobOpening });
+  });
+
+  it('wraps null when there is nothing left to publish', async () => {
+    const service = buildServiceMock();
+    service.findNextUnpublished.mockResolvedValue(null);
+    const controller = new JobOpeningController(service);
+
+    const result = await controller.findNextUnpublished();
+
+    expect(result).toEqual({ jobOpening: null });
+  });
+
   it('delegates find by id to the service', async () => {
     const service = buildServiceMock();
     const jobOpening = buildJobOpening();
@@ -99,7 +124,6 @@ describe('JobOpeningController', () => {
 
   it('delegates removal to the service', async () => {
     const service = buildServiceMock();
-    service.remove.mockResolvedValue(undefined);
     const controller = new JobOpeningController(service);
 
     await controller.remove('some-id');
